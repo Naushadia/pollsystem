@@ -15,7 +15,7 @@ class question extends Model
 
     public function options()
     {
-        return $this->hasMany(option::class, 'questionId','id');
+        return $this->hasMany(option::class, 'questionId', 'id');
     }
 
     public function poll()

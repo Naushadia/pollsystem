@@ -24,7 +24,7 @@ class RedirectIfAuthenticated
                 return redirect(RouteServiceProvider::HOME);
             }
         }
-        // added 
+        // added
         return response()->json(['status' => 'false','msg' => 'Invalid Token']);
         return $next($request);
     }

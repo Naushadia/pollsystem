@@ -31,10 +31,10 @@ class QuestionController extends Controller
     public function addQuestion(Request $request)
     {
         try {
-            $question = new question;
+            $question = new question();
             $question->UserId = Auth::user()->id;
             $question->title = $request->title;
-            
+
 
             $question->save();
 

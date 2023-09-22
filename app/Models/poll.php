@@ -19,10 +19,10 @@ class poll extends Model
         return $this->hasManyThrough(
             question::class,
             pollQuestion::class,
-            'pollId',
-            'id',
-            'id',
-            'questionId'
+            'pollId', // foreign key on the intermediate table reference local for current
+            'id', // foreign key of final model reference intermediate local key
+            'id', //local key on the current
+            'questionId',  // local key on intermediate
         );
     }
 

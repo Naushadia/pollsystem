@@ -38,12 +38,6 @@ class ParticipateController extends Controller
             ]);
             $count = 0;
             $userId = Auth::user()->id;
-            $poll = new participate();
-
-            $poll->UserId = $userId;
-            $poll->pollId = $request->pollId;
-
-            $poll->save();
 
             foreach($request->question as $quest) {
                 $obj = array(
@@ -53,12 +47,18 @@ class ParticipateController extends Controller
                 );
                 participatequestion::create($obj);
                 $option = option::find($quest['optionId']);
-                $count = $option->preferred === 1 ? $count + 1 : $count;
+                $count = $option->preferred === 1 && $quest['questionId'] == $option->questionId ? $count + 1 : $count;
             }
+            $poll = new participate();
 
+            $poll->UserId = $userId;
+            $poll->pollId = $request->pollId;
+            $poll->result = $count;
+
+            $poll->save();
             $participate_obj = poll::with('poll_questions.options')->find($poll->pollId);
 
-            return response()->json(['msg' => 'Question created successfully', 'data' => $participate_obj, 'result' => $count]);
+            return response()->json(['msg' => 'Participated successfully', 'data' => $participate_obj, 'result' => $count]);
         } catch (\Exception $ex) {
             return response()->json(['status' => 500, 'message' => $ex->getMessage()]);
         }
@@ -75,9 +75,16 @@ class ParticipateController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(participate $participate)
+    public function getParticipate(Request $request)
     {
-        //
+        try {
+            $userId = Auth::user()->id;
+            $participate_obj = participate::where(['userId' => $userId])->paginate();
+
+            return response()->json(['msg' => 'success', 'data' => $participate_obj]);
+        } catch (\Exception $ex) {
+            return response()->json(['status' => 500, 'message' => $ex->getMessage()]);
+        }
     }
 
     /**

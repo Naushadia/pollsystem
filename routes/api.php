@@ -22,25 +22,27 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::controller(UserController::class)->group(function($router){
+Route::controller(UserController::class)->group(function ($router) {
     Route::post('v1/login', 'login');
     Route::post('v1/signup', 'register');
     Route::get('v1/logout', 'logout');
+    Route::put('v1/profile', 'editprofile');
+    Route::get('v1/profile', 'getprofile');
 });
 
-Route::controller(QuestionController::class)->group(function($router){
+Route::controller(QuestionController::class)->group(function ($router) {
     Route::post('v1/question', 'addQuestion');
     Route::get('v1/question', 'getQuestion');
     Route::get('v1/userquestion', 'getUserQuestion');
 });
 
-Route::controller(PollController::class)->group(function($router){
+Route::controller(PollController::class)->group(function ($router) {
     Route::post('v1/poll', 'postPoll');
     Route::get('v1/poll', 'getPoll');
     Route::get('v1/userpoll', 'getUserPoll');
 });
 
-Route::controller(ParticipateController::class)->group(function($router){
+Route::controller(ParticipateController::class)->group(function ($router) {
     Route::post('v1/participate', 'postParticipate');
     Route::get('v1/participate', 'getParticipate');
 });

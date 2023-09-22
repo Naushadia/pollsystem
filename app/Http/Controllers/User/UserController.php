@@ -7,13 +7,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+
 use function random_bytes;
 
 class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:sanctum',['except' => ['register','login']]);
+        $this->middleware('auth:sanctum', ['except' => ['register','login']]);
     }
     public function register(Request $request)
     {
@@ -83,5 +84,20 @@ class UserController extends Controller
         }
 
         return response()->json(['status' => 200, 'message' => 'logged out successfully']);
+    }
+
+    public function editprofile(Request $request)
+    {
+        $userId = Auth::user()->id;
+        $user = User::find($userId);
+        $user->update($request->all());
+        return response()->json(['status' => 200, 'data' => $user]);
+    }
+
+    public function getprofile(Request $request)
+    {
+        $userId = Auth::user()->id;
+        $user = User::with('questions','poll','participate')->find($userId);
+        return response()->json(['status' => 200, 'data' => $user]);
     }
 }
